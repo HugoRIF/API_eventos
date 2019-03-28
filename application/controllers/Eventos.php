@@ -27,65 +27,35 @@ class Eventos extends REST_Controller {
 
 /*************************** GET usuarios ********************** */
 
-    private function validar_parametros_get($Nombre,$Contrasenia){
-        if(!empty($Nombre) && !empty($Contrasenia)){
+    private function validar_parametros_get($x){
+        if(!empty($x)){
             return  1;
-            #es 1 cuando Nombre y Contrasenia no son vacios
+           
         }
         else{
             return 0;
             #es 0 cuando alguno o ambos son vacios
         }
     }   
-    private function ver_tipo_usuario($usuario){
-        $id_tipo=$usuario['id_tipo'];
-        if($id_tipo == 2){
-            return 2;
-            #es 2 cuando es tipo usuario
-        }
-        else{
+    
+    private function checar_parametros_definidos_get($x){
+        if (isset($x)) {
             return 1;
-            #es 1 cuando es tipo administrador
-        }
-    }
-    private function checar_parametros_definidos_get($Nombre, $Contrasenia, $Dia, $Mes, $Anio){
-        if (isset($Nombre, $Contrasenia,$Dia, $Mes, $Anio)) {
-            return 1;
-            #es 1 cuando Nombre y Contrasenia estan definidos
-        }elseif(is_null($Nombre) && is_null($Contrasenia)){
+            
+        }elseif(is_null($x) ){
             return 2;
-            #es 2 cuando Nombre y Contrasenia no estan definidos
         }else{
             return 0;
-            #es 0 cuando solo uno esta definido
+            
         }
     }
 
     public function eventos_get() {
        $opcion=1;
-        #Revisamos si estan definidos.
-       // $opcion=$this->checar_parametros_definidos_get($Nombre, $Contrasenia, $Dia, $Mes, $Anio);
         switch($opcion){
-            #Validamos si no estan vacios
+            
             case 1:
-                /*if($this->validar_parametros_get($Nombre,$Contrasenia)==1){
-                    #(parametros validos) los parametros estan definidos y contienen algo
-                    #Hacemos select a la tabla usuario
-                    $usuario=$this->Usuarios_model->login($Nombre,$Contrasenia,$Dia, $Mes, $Anio);
-                    #checamos el exito del query
-                    if($usuario != 0){
-                        #exito del query
-                                $respuesta=$this->crear_respuesta(200,"Encontrado",$usuario);
-                                              }
-                    else {#falla query
-                        $respuesta=$this->crear_respuesta(404,"error en la consulta del usuario login",[]);
-                    }
-                }
-                else { #falla de los parametros
-                        $respuesta=$this->crear_respuesta(400,"error en los parametros",[]);
-                } 
-                */
-                $eventos=$this->Eventos_model->obtener_eventos_todos();
+                $eventos=$this->Eventos_model->obtener_todos_los_eventos();
                 if(!is_null($eventos) ){
                     $respuesta=$this->crear_respuesta(200,"Eventos encontrados",$eventos);
                 }else{
